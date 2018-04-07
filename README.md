@@ -5,11 +5,20 @@ Although this application is our "Graduation work", but we want to share our cod
  
 # Setting
 
+TO DO
+
 # Installation
 
+TO DO
+
 # How to use
+
+TO DO
  
 # Contributing
+
+Contributions are always welcome. If you want to contact us, please send mail to "beta1360@naver.com".
+
  
 # LICENSE
 
