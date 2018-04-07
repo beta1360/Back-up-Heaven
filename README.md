@@ -1,2 +1,3 @@
 # Back-up-Heaven
-Repo that manages applications that provide part-time backup
+
+ This application supports to find a part-time job and contact a recruitment who want to find a part-time worker.
