@@ -3,24 +3,24 @@
  This application supports to find a part-time job and contact a recruitment who want to find a part-time worker.</br>
 Although this application is our "Graduation work", but we want to share our code and develop on a better system.
  
-# Setting
+## Setting
 
 TO DO
 
-# Installation
+## Installation
 
 TO DO
 
-# How to use
+## How to use
 
 TO DO
  
-# Contributing
+## Contributing
 
 Contributions are always welcome. If you want to contact us, please send mail to "beta1360@naver.com".
 
  
-# LICENSE
+## LICENSE
 
 Based on [BSD-3 clause License](https://github.com/KeonHeeLee/Back-up-Heaven/blob/master/LICENSE)
 
