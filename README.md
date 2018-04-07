@@ -1,4 +1,6 @@
 # Back-up-Heaven application
+[![License: BSD-3 clause](https://img.shields.io/badge/licence-BSD-3%20clause-yellow.svg)](https://github.com/KeonHeeLee/Back-up-Heaven/blob/master/LICENSE)
+<img src="https://img.shields.io/badge/python-%3E%3D3-brightgreen.svg">
 
  This application supports to find a part-time job and contact a recruitment who want to find a part-time worker.</br>
 Although this application is our "Graduation work", but we want to share our code and develop on a better system.
