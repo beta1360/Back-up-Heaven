@@ -22,6 +22,8 @@ $ pip install pymsql
 
 ## Installation
 
+Server side : only clone our git-repository.
+
 ```
 $ git clone https://github.com/KeonHeeLee/Back-up-Heaven
 ```
