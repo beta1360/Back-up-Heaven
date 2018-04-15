@@ -8,11 +8,23 @@ Although this application is our "Graduation work", but we want to share our cod
  
 ## Setting
 
-TO DO
+- Install MySQL.
+```
+$ sudo apt-get update
+$ sudo apt-get install mysql-server
+```
+
+Install python3 modules; flask, pymysql
+```
+$ pip install flask
+$ pip install pymsql
+```
 
 ## Installation
 
-TO DO
+```
+$ git clone https://github.com/KeonHeeLee/Back-up-Heaven
+```
 
 ## How to use
 
