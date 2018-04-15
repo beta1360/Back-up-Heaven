@@ -14,7 +14,7 @@ $ sudo apt-get update
 $ sudo apt-get install mysql-server
 ```
 
-Install python3 modules; flask, pymysql
+- Install python modules; flask, pymysql
 ```
 $ pip install flask
 $ pip install pymsql
@@ -22,7 +22,7 @@ $ pip install pymsql
 
 ## Installation
 
-Server side : only clone our git-repository.
+- Server side : only clone our git-repository.
 
 ```
 $ git clone https://github.com/KeonHeeLee/Back-up-Heaven
