@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/login"
+            android:icon="@drawable/ic_lock_open_black_24dp"
+            android:title="로그인" />
+        <item
+            android:id="@+id/join"
+            android:icon="@drawable/ic_account_box_black_24dp"
+            android:title="회원가입" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="환경설정" />
+        <item
+            android:id="@+id/nav_manage"
+            android:title="대타천국 종료" />
+    </group>
+</menu>
