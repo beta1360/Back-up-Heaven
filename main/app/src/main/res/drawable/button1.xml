@@ -6,13 +6,18 @@
         <shape>
             <solid android:color="#ffffff" />
             <corners android:radius="10dp" />
+
+            <stroke
+                android:width="2dp"
+                android:color="@android:color/black" />
+
         </shape>
     </item>
 
     <!-- 클릭했을 때 -->
     <item android:state_focused="false" android:state_pressed="true">
         <shape>
-            <solid android:color="#00ffff" />
+            <solid android:color="#00BFFF" />
             <corners android:radius="10dp" />
         </shape>
     </item>

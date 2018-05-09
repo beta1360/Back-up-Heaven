@@ -7,9 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -17,7 +15,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class WriteBoard extends Activity {
@@ -30,7 +34,8 @@ public class WriteBoard extends Activity {
     protected TextView end_time = null;
     protected EditText urgency = null;
     protected EditText condition = null;
-    protected TextView local = null;
+    protected TextView upper_local = null;
+    protected TextView lower_local = null;
 
     protected int[] date = new int[3];
     protected int[] time = new int[2];
@@ -38,6 +43,22 @@ public class WriteBoard extends Activity {
     protected Button submit = null;
     protected Button cancel = null;
     protected String[] data = null;
+
+    private static final String MAIN_SERVER = "https://192.168.0.103:8000/regitst";
+    private String sender = null;
+    protected List<String> localList = null;
+    private int localIndex = -1;
+    private String selectedUpperLocal = null;
+    private String selectedLowerLocal = null;
+    protected RequestQueue mQueue = null;
+    protected JSONObject mResult = null;
+
+    GregorianCalendar calendar = new GregorianCalendar();
+    protected int year = calendar.get(Calendar.YEAR);
+    protected int month = calendar.get(Calendar.MONTH);
+    protected int day= calendar.get(Calendar.DAY_OF_MONTH);
+    protected int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    protected int minute = calendar.get(Calendar.MINUTE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -53,7 +74,8 @@ public class WriteBoard extends Activity {
         end_time = (TextView) findViewById(R.id.end_time);
         urgency = (EditText) findViewById(R.id.urgency);
         condition = (EditText) findViewById(R.id.condition);
-        local = (TextView) findViewById(R.id.local);
+        upper_local = (TextView) findViewById(R.id.upper_local);
+        lower_local = (TextView) findViewById(R.id.lower_local);
 
         submit = (Button) findViewById(R.id.button);
         cancel = (Button) findViewById(R.id.button2);
@@ -66,6 +88,8 @@ public class WriteBoard extends Activity {
 
         submit.setOnClickListener(submitter);
         cancel.setOnClickListener(calcelSubmittingBoard);
+        upper_local.setOnClickListener(selectUpperLocal);
+        lower_local.setOnClickListener(selectLowerLocal);
     }
 
     TextView.OnClickListener selectJob = new View.OnClickListener(){
@@ -116,82 +140,161 @@ public class WriteBoard extends Activity {
         }
     };
 
+    private String start_date_msg;
+    DatePickerDialog.OnDateSetListener start_dateSetListener= new DatePickerDialog.OnDateSetListener(){
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            // TODO Auto-generated method stub
+            date[0] = year;
+            date[1] = monthOfYear+1;
+            date[2] = dayOfMonth;
+            start_date_msg = Integer.toString(date[0])+"."+Integer.toString(date[1])+"."+Integer.toString(date[2]);
+            start_date.setText(start_date_msg);
+        }
+    };
+
     TextView.OnClickListener selectStartDate = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            String start;
-            DatePickerDialog dpd = new DatePickerDialog(WriteBoard.this, mDateSetListener, 2018, 5, 8);
-            dpd.show();
+            new DatePickerDialog(WriteBoard.this, start_dateSetListener , year, month, day).show();
+        }
+    };
 
-            start = Integer.toString(date[0])+"."+Integer.toString(date[1])+"."+Integer.toString(date[2]);
-
-            if(start_time.length() != 0){
-                TimePickerDialog tpd = new TimePickerDialog(WriteBoard.this, mTimeSetListener, 12, 0, false);
-                tpd.show();
-                start += " " + Integer.toString(date[3]) +":" + Integer.toString(date[4]);
-            }
-            start_date.setText(start);
+    private String start_time_msg;
+    TimePickerDialog.OnTimeSetListener start_timeSetListener= new TimePickerDialog.OnTimeSetListener(){
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // TODO Auto-generated method stub
+            time[0] = hourOfDay;
+            time[1] = minute;
+            start_time_msg = Integer.toString(time[0])+":"+Integer.toString(time[1]);
+            start_time.setText(start_time_msg);
         }
     };
 
     TextView.OnClickListener selectStartTime = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            String start;
+            new TimePickerDialog(WriteBoard.this, start_timeSetListener, hour, minute, false).show();
+        }
+    };
 
-            TimePickerDialog tpd = new TimePickerDialog(WriteBoard.this, mTimeSetListener, 12, 0, false);
-            tpd.show();
-            start = Integer.toString(time[0]) +":" + Integer.toString(time[1]);
-
-            start_time.setText(start);
+    private String end_date_msg;
+    DatePickerDialog.OnDateSetListener end_dateSetListener= new DatePickerDialog.OnDateSetListener(){
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            // TODO Auto-generated method stub
+            date[0] = year;
+            date[1] = monthOfYear+1;
+            date[2] = dayOfMonth;
+            end_date_msg = Integer.toString(date[0])+"."+Integer.toString(date[1])+"."+Integer.toString(date[2]);
+            end_date.setText(end_date_msg);
         }
     };
 
     TextView.OnClickListener selectEndDate = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            String end_time;
-            DatePickerDialog dpd = new DatePickerDialog(WriteBoard.this, mDateSetListener, 2018, 5, 8);
-            dpd.show();
+            new DatePickerDialog(WriteBoard.this, end_dateSetListener , year, month, day).show();
+        }
+    };
 
-            end_time = Integer.toString(date[0])+"."+Integer.toString(date[1])+"."+Integer.toString(date[2]);
-
-            if(end_time.length() != 0){
-                TimePickerDialog tpd = new TimePickerDialog(WriteBoard.this, mTimeSetListener, 12, 0, false);
-                tpd.show();
-                end_time += " " + Integer.toString(date[3]) +":" + Integer.toString(date[4]);
-            }
-
-            end_date.setText(end_time);
+    private String end_time_msg;
+    TimePickerDialog.OnTimeSetListener end_timeSetListener= new TimePickerDialog.OnTimeSetListener(){
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // TODO Auto-generated method stub
+            time[0] = hourOfDay;
+            time[1] = minute;
+            end_time_msg = Integer.toString(time[0])+":"+Integer.toString(time[1]);
+            end_time.setText(end_time_msg);
         }
     };
 
     TextView.OnClickListener selectEndTime = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            String end;
-
-            TimePickerDialog tpd = new TimePickerDialog(WriteBoard.this, mTimeSetListener, 12, 0, false);
-            tpd.show();
-            end = Integer.toString(time[0]) +":" + Integer.toString(time[1]);
-
-            end_time.setText(end);
+            new TimePickerDialog(WriteBoard.this, end_timeSetListener, hour, minute, false).show();
         }
     };
 
-    TextView.OnClickListener selectLocal = new View.OnClickListener() {
+    TextView.OnClickListener selectUpperLocal = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
-            int width = dm.widthPixels;
-            int height = dm.heightPixels;
+            final CharSequence[] items = { "서울시", "대구시", "경상북도" };
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    WriteBoard.this);
 
-            LocalDialog ld = new LocalDialog(WriteBoard.this);
-            WindowManager.LayoutParams wm = ld.getWindow().getAttributes();
-            wm.copyFrom(ld.getWindow().getAttributes());
-            wm.width = width / 2;
-            wm.height = height / 2;
-            ld.show();
+            alertDialogBuilder.setTitle("지역 선택");
+            alertDialogBuilder.setItems(items,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,
+                                            int id) {
+                            localIndex = id;
+                            selectedUpperLocal = items[id].toString();
+                            upper_local.setText(selectedUpperLocal);
+                            dialog.dismiss();
+                        }
+                    });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
+    };
+
+    TextView.OnClickListener selectLowerLocal = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    WriteBoard.this);
+
+            alertDialogBuilder.setTitle("지역 선택");
+            if(localIndex == 0) {
+                final CharSequence[] items = { "강남구","서초구","강동구","강북구","종로구" };
+                alertDialogBuilder.setItems(items,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+
+                                selectedLowerLocal = items[id].toString();
+                                lower_local.setText(selectedLowerLocal);
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            } else if(localIndex == 1){
+                final CharSequence[] items = { "달서구", "수성구", "달성군", "중구", "북구" };
+                alertDialogBuilder.setItems(items,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+
+                                selectedLowerLocal = items[id].toString();
+                                lower_local.setText(selectedLowerLocal);
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            } else if(localIndex == 2){
+                final CharSequence[] items = { "포항시", "구미시", "안동시", "칠곡군", "김천시" };
+                alertDialogBuilder.setItems(items,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+
+                                selectedLowerLocal = items[id].toString();
+                                lower_local.setText(selectedLowerLocal);
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            } else {
+                Toast.makeText(WriteBoard.this, "상위지역부터 선택해주세요",Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
@@ -224,10 +327,41 @@ public class WriteBoard extends Activity {
                 builder.setNegativeButton("예",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                /*JSONObject request = new JSONObject();
+                                try {
+                                    request.put("title",data[0]);
+                                    request.put("storename",data[1]);
+                                    request.put("job",data[2]);
+                                    request.put("start_date",data[3]);
+                                    request.put("start_time",data[4]);
+                                    request.put("end_date",data[5]);
+                                    request.put("end_time",data[6]);
+                                    request.put("urgency",data[7]);
+                                    request.put("condition",data[8]);
+                                    request.put("upper_local",data[9]);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
-                                /* Server parts */
+                                JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST,
+                                        MAIN_SERVER, request, new Response.Listener<JSONObject>(){
+                                    @Override
+                                    public void onResponse (JSONObject response){
+                                        mResult = response;
+                                    }
+                                }
+                                        ,new Response.ErrorListener(){
+                                    @Override
+                                    public void onErrorResponse(VolleyError error){
+                                        Toast.makeText(WriteBoard.this,
+                                                error.toString(),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
-                                Toast.makeText(getApplicationContext(),"게시글을 작성하였습니다.",Toast.LENGTH_LONG).show();
+                                mQueue.add(req);
+                                */
+                                Toast.makeText(getApplicationContext(), "게시글을 작성하였습니다.", Toast.LENGTH_LONG).show();
                                 goToMainActivity();
                             }
                         });
@@ -239,18 +373,19 @@ public class WriteBoard extends Activity {
     Button.OnClickListener calcelSubmittingBoard = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(WriteBoard.this);
             builder.setTitle("게시글 작성 취소");
             builder.setMessage("게시글 작성을 취소하시겠습니까?");
             builder.setPositiveButton("아니오",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+
                         }
                     });
             builder.setNegativeButton("예",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(getApplicationContext(),"게시글 작성을 취소하셨습니다.",Toast.LENGTH_LONG).show();
+                            Toast.makeText(WriteBoard.this,"게시글 작성을 취소하셨습니다.",Toast.LENGTH_LONG).show();
                             goToMainActivity();
                         }
                     });
@@ -295,6 +430,6 @@ public class WriteBoard extends Activity {
         data[6] = end_time.getText().toString();
         data[7] = urgency.getText().toString();
         data[8] = condition.getText().toString();
-        data[9] = local.getText().toString();
+        data[9] = upper_local.getText().toString();
     }
 }
