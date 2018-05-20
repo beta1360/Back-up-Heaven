@@ -4,30 +4,28 @@
 <img src="https://img.shields.io/badge/android-%3E%3D23-blue.svg">
 
  This application supports to find a part-time job and contact a recruitment who want to find a part-time worker.</br>
-Although this application is our "Graduation work", but we want to share our code and develop on a better system.
+Although this application is our "Graduation work", but we want to share our code and develop on a better system. </br>
+<br/>
+If you want to see this system's server, go to [this link](https://github.com/KeonHeeLee/Back-up-Heaven-Server).
  
 ## Setting
 
-- Install MySQL.
+- Setting Android Volley
+ 1. import volley library (in app-build.gradle)
 ```
-$ sudo apt-get update
-$ sudo apt-get install mysql-server
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.android.volley:volley:1.1.0'
+}
 ```
-
-- Install python modules; flask, pymysql
-```
-$ pip install flask
-$ pip install pymsql
-```
-
-## Installation
-
-- Server side : only clone our git-repository.
-
-```
-$ git clone https://github.com/KeonHeeLee/Back-up-Heaven
-```
-
+ 2. gradle sync
+ 
 ## How to use
 
 TO DO
@@ -39,32 +37,20 @@ Contributions are always welcome. If you want to contact us, please send mail to
  
 ## LICENSE
 
-Based on [BSD-3 clause License](https://github.com/KeonHeeLee/Back-up-Heaven/blob/master/LICENSE)
+Based on [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 ```
-Copyright 2018 Keon-hee Lee, Dae-kyo Jeong, Ju-mi Ryu, Hye-won Choi
+Copyright 2018, Keon-Hee Lee, Dae-Kyo Jeong, Ju-mi Ryu, Hye-won Choi 
 
-Redistribution and use in source and binary forms, with or without modification, 
-are permitted provided that the following conditions are met:
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-1. Redistributions of source code must retain the above copyright notice, this list 
-of conditions and the following disclaimer.
+    http://www.apache.org/licenses/LICENSE-2.0
 
-2. Redistributions in binary form must reproduce the above copyright notice, this list 
-of conditions and the following disclaimer in the documentation and/or other materials 
-provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be 
-used to endorse or promote products derived from this software without specific prior
-written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
-OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
-THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
-OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ```
