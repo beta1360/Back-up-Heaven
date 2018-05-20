@@ -1,6 +1,5 @@
 # Back-up-Heaven application
 [![License: BSD-3 clause](https://img.shields.io/badge/LICENSE-BSD--3%20clause-yellow.svg)](https://github.com/KeonHeeLee/Back-up-Heaven/blob/master/LICENSE)
-<img src="https://img.shields.io/badge/python-%3E%3D3-brightgreen.svg">
 <img src="https://img.shields.io/badge/android-%3E%3D23-blue.svg">
 
  This application supports to find a part-time job and contact a recruitment who want to find a part-time worker.</br>
