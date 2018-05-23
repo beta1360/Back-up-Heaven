@@ -1,4 +1,4 @@
-package com.example.daekyo.main;
+package ga.daeta.daetaheaven.daetaheaven;
 
 import org.junit.Test;
 

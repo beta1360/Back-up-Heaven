@@ -1,243 +1,604 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="15dp"
+    android:background="#EAEAEA"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:text="글 제목"/>
-
-        <EditText
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="게시글 제목을 입력하세요"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:text="지점 이름"/>
-
-        <EditText
-            android:id="@+id/storename"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="지점 명을 입력하세요"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:text="직종 "
-            android:padding="5dp"/>
-
-        <TextView
-            android:id="@+id/job"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint =" 직종을 선택하세요."
-            android:textColorHint="#0000FF"
-            android:textSize = "18dp"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_height="match_parent"
+            android:background="#FFBB00"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_margin="11dp"
+                android:textSize="28sp"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:text="대타 구해요 작성"></TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
 
             <TextView
-                android:textColor="#000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="기간"
-                android:padding="5dp"
+                android:text="▶ 게시글 제목"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="제목을 입력하세요" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="▶ 지점 정보"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지점 위치"
+                android:textSize="17sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시/도 : "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sido"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/sido"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시/군/구 : "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/sigungu"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/positiondetail"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="상세주소를 입력하세요" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="지점 명"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/storename"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="ex) 맘스터치 옥계점" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="지점 사진 등록"
+                android:textColor="#000000" />
+
+            <ImageView
+                android:id="@+id/storeimage"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/ic_menu_camera"
+                android:background="#fff"
+                />
+            <Button
+                android:id="@+id/picturebutton"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
+                android:background="#FFBB00"
+                android:onClick="onPicture"
+                android:text="사진등록"
+                android:textSize="15sp"
                 />
 
             <TextView
-                android:id="@+id/start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint ="시작 날짜"
-                android:textColorHint="#0000FF"
-                android:textSize = "18dp"
-                android:padding="5dp"/>
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="연락처"
+                android:textColor="#000000" />
 
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"/>
-
-            <TextView
-                android:id="@+id/start_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint ="시간"
-                android:textColorHint="#0000FF"
-                android:textSize = "18dp"
-                android:padding="5dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" 부터"/>
+            <EditText
+                android:id="@+id/telephone"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:inputType="number"
+                android:layout_margin="3dp"
+                android:hint="'-'를 제외한 연락처를 입력하세요" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="▶ 근무 조건"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:text="대타 기간"
+                android:textSize="17sp"
+                android:textColor="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/year"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/year"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="년   "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/month"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/month"
+                    android:drawSelectorOnTop="true"
+                    android:minWidth="80dp"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="월   "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/day"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/day"
+                    android:drawSelectorOnTop="true"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="~"
                 android:textColor="#000000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-"
-                android:textSize = "18dp"
-                android:layout_margin="5dp" />
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/deyear"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/year"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="년   "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/demonth"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:drawSelectorOnTop="true"
+                    android:entries="@array/month"
+                    android:minWidth="80dp"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="월   "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/deday"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/day"
+                    android:drawSelectorOnTop="true"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+
 
             <TextView
-                android:id="@+id/end_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint ="마치는 날짜"
-                android:textColorHint="#0000FF"
-                android:textSize = "18dp"
-                android:padding="5dp"/>
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="급여 정보"
+                android:textColor="#000000" />
 
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"/>
+            <EditText
+                android:id="@+id/money"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="ex) 시급:7,550원 or 일당: 70,000원" />
 
-            <TextView
-                android:id="@+id/end_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint ="시간"
-                android:textColorHint="#0000FF"
-                android:textSize = "18dp"
-                android:padding="5dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" 까지"/>
         </LinearLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:textColor="#000000"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="시급"/>
-
-        <EditText
-            android:id="@+id/urgency"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:digits="0123456789"
-            android:hint="시급을 입력하세요"/>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="▶ 대타 자격 조건"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
 
-        <TextView
-            android:textColor="#000000"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="조건"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:text="성별"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
 
-        <EditText
-            android:id="@+id/condition"
+            <RadioGroup
+                android:id="@+id/gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                >
+
+                <RadioButton
+                    android:id="@+id/gender_xx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="15dp"
+                    android:text="남자"/>
+
+                <RadioButton
+                    android:id="@+id/gender_xy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="15dp"
+                    android:text="여자"/>
+
+                <RadioButton
+                    android:id="@+id/gender_xxy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="15dp"
+                    android:text="무관"/>
+
+
+            </RadioGroup>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="경력 조건"
+                android:textSize="17sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/condition"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="필수 경력 조건을 입력하세요" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="조건을 입력하세요"/>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="▶ 모집 내용"
+                android:textSize="20sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
 
-        <TextView
-            android:textColor="#000000"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지역"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="모집 직종"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:textColor="#000000" />
 
-        <TextView
-            android:id="@+id/upper_local"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint ="상위 지역"
-            android:textColorHint="#0000FF"
-            android:textSize = "18dp"
-            android:padding="5dp"/>
-        <TextView
-            android:id="@+id/lower_local"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint ="하위 지역"
-            android:textColorHint="#0000FF"
-            android:textSize = "18dp"
-            android:padding="5dp"/>
-    </LinearLayout>
+            <EditText
+                android:id="@+id/job"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="모집 직종을 입력하세요" />
 
-    <LinearLayout
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/button"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="20dp"
-            android:text="작성"
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="우대 조건"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/plus"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="우대 조건을 입력하세요" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="추가 내용"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/addinformation"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="3dp"
+                android:background="@drawable/back"
+                android:hint="추가 내용을 입력하세요\n(예-대타 시간대, 추가 자격요건 등)"
+                android:maxHeight="200px"
+                android:padding="1dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/okButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="취소"
-                android:textSize="20dp"
-                />
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="#FFBB00"
+                android:onClick="onWrite"
+                android:text="작성" />
+
+            <Button
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="#FFBB00"
+                android:onClick="onCancel"
+                android:text="취소" />
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/sidocheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            />
+        <TextView
+            android:id="@+id/sigungucheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            />
+        <TextView
+            android:id="@+id/yearcheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            />
+        <TextView
+            android:id="@+id/monthcheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            />
+        <TextView
+            android:id="@+id/daycheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            />
+        <TextView
+            android:id="@+id/deyearcheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            />
+        <TextView
+            android:id="@+id/demonthcheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            />
+        <TextView
+            android:id="@+id/dedaycheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            />
+
+        <TextView
+            android:id="@+id/tgender"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            />
     </LinearLayout>
-</LinearLayout>
+</ScrollView>
+

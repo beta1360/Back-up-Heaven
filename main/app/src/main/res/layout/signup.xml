@@ -1,259 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="15dp"
-    android:orientation="vertical">
-
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent" >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/IDView"
-            android:layout_width="58dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="ID" />
-
-        <EditText
-            android:id="@+id/IDText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ems="10"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/PassView"
-            android:layout_width="58dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="비밀번호" />
-
-        <EditText
-            android:id="@+id/PassText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ems="10"
-            android:inputType="textPassword" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/ConfirmView"
-            android:layout_width="58dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="비밀번호확인" />
-
-        <EditText
-            android:id="@+id/ConfirmText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ems="10"
-            android:inputType="textPassword" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/NameView"
-            android:layout_width="58dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="이름" />
-
-        <EditText
-            android:id="@+id/NameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ems="10"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/SexView"
-            android:layout_width="88dp"
-            android:layout_height="wrap_content"
-            android:text="성별" />
-
-        <Spinner
-            android:id="@+id/sex"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:spinnerMode="dialog"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/BirthView"
-            android:layout_width="58dp"
-            android:layout_height="wrap_content"
-            android:text="생년월일" />
-
-        <EditText
-            android:id="@+id/BirthText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/PhoneView"
-            android:layout_width="58dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="휴대전화" />
-
-        <EditText
-            android:id="@+id/PhoneText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ems="10"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/AddressView"
+                android:id="@+id/IDView"
                 android:layout_width="58dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="주소" />
+                android:text="ID" />
 
-            <TextView
-                android:id="@+id/UpperLocal"
+            <EditText
+                android:id="@+id/IDText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ems="10"
-                android:text="상위 주소"
                 />
-            <TextView
-                android:id="@+id/LowerLocal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:ems="10"
-                android:text="하위 주소"
-                />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/PassView"
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="비밀번호" />
+
             <EditText
-                android:id="@+id/AddressText"
+                android:id="@+id/PassText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ems="10"
+                android:inputType="textPassword" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ConfirmView"
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="비밀번호확인" />
+
+            <EditText
+                android:id="@+id/ConfirmText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ems="10"
+                android:inputType="textPassword" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/NameView"
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="이름" />
+
+            <EditText
+                android:id="@+id/NameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ems="10"
                 />
+
         </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/Sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="성별" />
+
+            <Spinner
+                android:id="@+id/SexText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ems="10" />
+
+
+
+            <TextView
+                android:id="@+id/BirthView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="생년월일" />
+
+            <EditText
+                android:id="@+id/BirthText"
+                android:layout_width="172dp"
+                android:layout_height="wrap_content"
+                android:ems="10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/PhoneView"
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="휴대전화" />
+
+            <EditText
+                android:id="@+id/PhoneText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ems="10"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/JobView"
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="주직종" />
+
+            <Spinner
+                android:id="@+id/JobText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ems="10"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="주소" />
+
+            <TextView
+                android:id="@+id/signup_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+
+            <Button
+                android:id="@+id/selct_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="선택하기"
+                android:layout_weight="2"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="58dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="이름" />
+
+            <EditText
+                android:id="@+id/signup_sub_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ems="30"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/BtnJoin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/button1"
+                android:text="회원가입" />
+        </LinearLayout>
+
+
 
         <TextView
-            android:id="@+id/JobView"
-            android:layout_width="58dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="주직종" />
-
-        <Spinner
-            android:id="@+id/JobText"
+            android:id="@+id/sexcheck"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ems="10"
+            android:layout_height="0dp"
+            android:visibility="invisible"
             />
-
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/BtnJoin"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/button1"
-            android:text="회원가입" />
-
-    </LinearLayout>
-
-
-</LinearLayout>
+</ScrollView>

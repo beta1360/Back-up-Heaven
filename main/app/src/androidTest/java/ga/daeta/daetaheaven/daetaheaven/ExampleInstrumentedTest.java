@@ -1,4 +1,4 @@
-package com.example.daekyo.main;
+package ga.daeta.daetaheaven.daetaheaven;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.daekyo.main", appContext.getPackageName());
+        assertEquals("ga.daeta.daetaheaven.daetaheaven", appContext.getPackageName());
     }
 }

@@ -22,32 +22,28 @@
             android:orientation="horizontal">
 
              <Button
-                 android:id="@+id/sido"
+                 android:id="@+id/upper_local"
                  android:background="@drawable/button1"
                  android:layout_marginRight="6dp"
+                 android:layout_marginLeft="6dp"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                 android:text="시/도"/>
 
                 <Button
-                    android:id="@+id/sigu"
+                    android:id="@+id/lower_local"
                     android:background="@drawable/button1"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="시/군/구"/>
 
-                <Button
-                    android:id="@+id/dong"
-                    android:layout_marginRight="6dp"
-                    android:background="@drawable/button1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="동/읍/면"/>
 
                 <Button
-                    android:id="@+id/career"
+                    android:id="@+id/job"
                     android:layout_marginRight="6dp"
+                    android:layout_marginLeft="6dp"
                     android:background="@drawable/button1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -60,6 +56,7 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation="horizontal">
+
             <ImageButton
                 android:id="@+id/imagebutton"
                 android:layout_marginTop="15dp"
