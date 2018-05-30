@@ -44,9 +44,9 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        if (savedInstanceState != null)
-            ID = savedInstanceState.getString("ID");
-
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+            ID = bundle.getString("ID");
 
         mQueue = Volley.newRequestQueue(this);
 
@@ -110,7 +110,7 @@ public class Login extends AppCompatActivity {
                         ID = id;
                         Toast.makeText(Login.this,"오늘도 환영합니다."+id+"님!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Login.this, MainActivity.class);
-                        intent.putExtra("id", ID);
+                        intent.putExtra("ID", ID);
                         startActivity(intent);
                     } else {
                         Toast.makeText(Login.this,"존재하지 않거나 잘못된 ID혹은 PW입니다.", Toast.LENGTH_SHORT).show();

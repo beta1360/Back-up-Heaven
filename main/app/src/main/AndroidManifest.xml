@@ -26,10 +26,14 @@
             android:label="             대타천국">
         </activity>
         <activity
-            android:name=".board_write_result"
+            android:name=".ApplyingList"
             android:label="             대타천국">
         </activity>
-        <activity android:name=".board_write"
+        <activity
+            android:name=".ApplyerList"
+            android:label="             대타천국">
+        </activity>
+        <activity android:name=".BoardWriter"
             android:label="             대타천국">
         </activity>
         <activity android:name=".Login"

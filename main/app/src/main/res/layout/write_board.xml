@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EAEAEA"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFBB00"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_margin="11dp"
+                android:textSize="28sp"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:text="대타 구해요 작성"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="▶ 게시글 제목"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/bw_title"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="제목을 입력하세요" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="▶ 지점 정보"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지점 위치"
+                android:textSize="17sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시/도 : "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/bw_sido"
+                    android:text="지역을 선택하세요."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="상세주소 : "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/bw_positiondetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/back"
+                    android:padding="1dp"
+                    android:layout_margin="3dp"
+                    android:hint="상세주소를 입력하세요" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="지점 명"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/bw_storename"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="ex) 맘스터치 옥계점" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="연락처"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/bw_telephone"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:inputType="number"
+                android:layout_margin="3dp"
+                android:hint="'-'를 제외한 연락처를 입력하세요" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="▶ 근무 조건"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:text="대타 기간"
+                android:textSize="17sp"
+                android:textColor="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/bw_year"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/year"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="년   "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/bw_month"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/month"
+                    android:drawSelectorOnTop="true"
+                    android:minWidth="80dp"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="월   "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/bw_day"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/day"
+                    android:drawSelectorOnTop="true"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일     "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/bw_hour"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/month"
+                    android:drawSelectorOnTop="true"
+                    android:minWidth="80dp"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/bw_min"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/day"
+                    android:drawSelectorOnTop="true"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="~"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/bw_end_year"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/year"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="년   "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/bw_end_month"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/month"
+                    android:drawSelectorOnTop="true"
+                    android:minWidth="80dp"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="월   "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/bw_end_day"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/day"
+                    android:drawSelectorOnTop="true"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일     "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/bw_end_hour"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/month"
+                    android:drawSelectorOnTop="true"
+                    android:minWidth="80dp"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/bw_end_min"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/day"
+                    android:drawSelectorOnTop="true"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="급여 정보"
+                android:textColor="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/bw_money"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:inputType="number"
+                    android:digits="0123456789"
+                    android:background="@drawable/back"
+                    android:padding="1dp"
+                    android:layout_margin="3dp"
+                    android:hint="7000" />
+
+                <TextView
+                    android:text=" 원"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_margin="3dp"
+                    android:textSize="17sp"
+                    android:textColor="#000000"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="▶ 대타 자격 조건"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:text="성별"
+                    android:layout_margin="3dp"
+                    android:textColor="#000000" />
+
+                <Spinner
+                    android:id="@+id/bw_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/back"
+                    android:entries="@array/day"
+                    android:drawSelectorOnTop="true"
+                    android:spinnerMode="dialog"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="경력 조건"
+                android:textSize="17sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/bw_condition"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="필수 경력 조건을 입력하세요" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="▶ 모집 내용"
+                android:textSize="20sp"
+                android:layout_margin="3dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="모집 직종"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/bw_job"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:text="모집 직종을 선택하세요." />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="우대 조건"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/bw_plus"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/back"
+                android:padding="1dp"
+                android:layout_margin="3dp"
+                android:hint="우대 조건을 입력하세요" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:textSize="17sp"
+                android:text="추가 내용"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/bw_addinformation"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="3dp"
+                android:background="@drawable/back"
+                android:hint="추가 내용을 입력하세요\n(예-대타 시간대, 추가 자격요건 등)"
+                android:maxHeight="200px"
+                android:padding="1dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bw_okButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="#FFBB00"
+                android:onClick="onWrite"
+                android:text="작성" />
+
+            <Button
+                android:id="@+id/bw_cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="#FFBB00"
+                android:onClick="onCancel"
+                android:text="취소" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+

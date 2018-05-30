@@ -31,6 +31,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class Signup extends AppCompatActivity {
+    private String ID = null;
+
     protected String upper_local_text = null;
     protected String upper_local = "대한민국";
     protected String lower_local = null;
@@ -78,6 +80,10 @@ public class Signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+            ID = bundle.getString("ID");
+
         IDText = (EditText) findViewById(R.id.IDText);
         PassText = (EditText) findViewById(R.id.PassText);
         ConfirmText = (EditText) findViewById(R.id.ConfirmText);
@@ -90,8 +96,8 @@ public class Signup extends AppCompatActivity {
         local = (TextView) findViewById(R.id.signup_addr);
         select_local = (Button) findViewById(R.id.selct_addr);
 
-        sexList.add("남");
-        sexList.add("여");
+        sexList.add("남자");
+        sexList.add("여자");
         sexSpinnerAdapter = new ArrayAdapter<String>(Signup.this, android.R.layout.simple_spinner_item, sexList);
         sex.setAdapter(sexSpinnerAdapter);
         sex.setOnItemSelectedListener(sexSelecter);
@@ -249,7 +255,7 @@ public class Signup extends AppCompatActivity {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int pos) {
                 upper_local = items[pos].toString();
-                upper_local_text += upper_local;
+                upper_local_text = upper_local;
                 getLowerLocalFilter();
             }
         });

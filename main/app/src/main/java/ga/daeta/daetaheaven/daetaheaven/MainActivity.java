@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     protected Button upper_local = null;
     protected Button lower_local = null;
     protected Button job = null;
+    protected ImageButton getDaeta = null;
     protected ListView boards = null;
     protected ArrayList<SimpleStoreInfo> mArray = new ArrayList<SimpleStoreInfo>();
     protected ArrayList<String> upperLocalList = new ArrayList<String>();
@@ -68,8 +70,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState != null)
-            ID = savedInstanceState.getString("ID");
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null)
+            ID = bundle.getString("ID");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity
         boards = (ListView) findViewById(R.id.boards);
         mAdapter = new SimpleStoreInfoAdapter(this, R.layout.simple_board);
         boards.setAdapter(mAdapter);
+        getDaeta = (ImageButton)findViewById(R.id.imagebutton);
 
         mQueue = Volley.newRequestQueue(this);
         requestBoardList(null, null);
@@ -111,6 +116,21 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 getJobFilter();
+            }
+        });
+        getDaeta.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(ID!=null) {
+                    Intent intent = new Intent(MainActivity.this, BoardWriter.class);
+                    intent.putExtra("ID", ID);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "로그인이 필요한 서비스입니다.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, Login.class);
+                    intent.putExtra("ID", ID);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -152,19 +172,42 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent intent;
+        switch(id) {
+            case R.id.login:
+                intent = new Intent(MainActivity.this, Login.class);
+                intent.putExtra("id", ID);
+                startActivity(intent);
+                break;
 
-        if (id == R.id.login) {
-            Intent intent = new Intent(MainActivity.this, Login.class);
-            intent.putExtra("id", ID);
-            startActivity(intent);
-        } else if (id == R.id.join) {
-            Intent intent = new Intent(MainActivity.this, Signup.class);
-            intent.putExtra("id", ID);
-            startActivity(intent);
-        } else if (id == R.id.settings) {
+            case R.id.join:
+                if(ID == null) {
+                    intent = new Intent(MainActivity.this, Signup.class);
+                    intent.putExtra("id", ID);
+                    startActivity(intent);
+                } else
+                    Toast.makeText(MainActivity.this, "이미 로그인 상태입니다.", Toast.LENGTH_SHORT).show();
+                break;
 
-        } else if (id == R.id.nav_manage) {
+            case R.id.applying:
+                intent = new Intent(MainActivity.this, ApplyingList.class);
+                intent.putExtra("id", ID);
+                startActivity(intent);
+                break;
 
+            case R.id.serve_daeta:
+                intent = new Intent(MainActivity.this, ApplyerList.class);
+                intent.putExtra("id", ID);
+                startActivity(intent);
+                break;
+
+            case R.id.settings:
+
+                break;
+
+            default:
+
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -421,7 +464,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent detail = new Intent(this, DetailBoard.class);
-        detail.putExtra("id", ID);
+        detail.putExtra("ID", ID);
         detail.putExtra("no", mArray.get(i).getNo());
         startActivity(detail);
     }

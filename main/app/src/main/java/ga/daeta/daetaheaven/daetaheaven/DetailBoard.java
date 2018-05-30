@@ -2,8 +2,13 @@ package ga.daeta.daetaheaven.daetaheaven;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +29,7 @@ public class DetailBoard extends Activity {
     protected RequestQueue mQueue = null;
     protected JSONObject mResult = null;
     protected String SERVER_BOARD = "http://daeta.ga/board?no=";
+    protected String SERVER_APPLY = "http://daeta.ga/support";
 
     protected TextView title = null;
     protected TextView local = null;
@@ -39,6 +45,8 @@ public class DetailBoard extends Activity {
     protected TextView add_info = null;
     protected TextView detail_main = null;
 
+    protected Button apply_daeta = null;
+    protected JSONObject applyer = null;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +72,9 @@ public class DetailBoard extends Activity {
         favor = (TextView) findViewById(R.id.detail_plus);
         add_info = (TextView) findViewById(R.id.detail_addinformation);
         detail_main = (TextView) findViewById(R.id.detail_main);
+
+        apply_daeta = (Button)findViewById(R.id.apply_daeta);
+        apply_daeta.setOnClickListener(apply_listener);
 
         SERVER_BOARD = SERVER_BOARD + Integer.toString(no);
         mQueue = Volley.newRequestQueue(this);
@@ -124,6 +135,68 @@ public class DetailBoard extends Activity {
             Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
             mResult = null;
         }
+    }
+
+    Button.OnClickListener apply_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(ID == null)
+                Toast.makeText(DetailBoard.this,"로그인이 필요한 서비스입니다.",Toast.LENGTH_SHORT).show();
+            else {
+                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(DetailBoard.this);
+                alert_confirm.setMessage(storename + "에 대타 지원하시겠습니까?")
+                        .setCancelable(false).setPositiveButton("확인",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                applyDaeta();
+                                Toast.makeText(DetailBoard.this, "대타 지원을 완료하셨습니다.", Toast.LENGTH_SHORT).show();
+                                Intent go_main = new Intent(DetailBoard.this, ApplyingList.class);
+                                go_main.putExtra("id", ID);
+                                startActivity(go_main);
+                            }
+                        }).setNegativeButton("취소",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                return;
+                            }
+                        });
+                AlertDialog alert = alert_confirm.create();
+                alert.show();
+            }
+        }
+    };
+
+    protected void applyDaeta(){
+        applyDaetaStream();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                SERVER_APPLY, applyer, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                mResult = response;
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(DetailBoard.this,
+                                "서버문제로 인해 대타지원에 실패하셨습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        mQueue.add(request);
+    }
+
+    protected void applyDaetaStream(){
+        applyer = new JSONObject();
+        try {
+            applyer.put("id",ID);
+            applyer.put("no",no);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 

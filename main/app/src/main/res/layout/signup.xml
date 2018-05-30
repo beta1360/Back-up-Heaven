@@ -235,7 +235,7 @@
                 android:layout_width="58dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="이름" />
+                android:text="상세주소" />
 
             <EditText
                 android:id="@+id/signup_sub_addr"
