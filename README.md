@@ -11,7 +11,7 @@ If you want to see this system's server, go to [this link](https://github.com/Ke
 
 - Setting Android Volley
  1. import volley library (in app-build.gradle)
-```
+```groovy
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.0'
