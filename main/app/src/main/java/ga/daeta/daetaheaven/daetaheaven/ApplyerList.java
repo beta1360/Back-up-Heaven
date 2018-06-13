@@ -1,15 +1,19 @@
 package ga.daeta.daetaheaven.daetaheaven;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,10 +31,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ApplyerList extends Activity{
+public class ApplyerList extends Activity implements AdapterView.OnItemClickListener{
     private String ID = null;
 
-    protected String SERVER_APPLYING = "http://daeta.ga/supporters?id=";
+    protected String SERVER_APPLYER = "http://daeta.ga/supporters?id=";
+    protected String SERVER_RECRUITMENT = "http://daeta.ga/recruitment?no=";
     protected RequestQueue mQueue = null;
     protected ArrayList<Applyer> mArray = new ArrayList<Applyer>();
     protected ApplyerAdapter mAdapter = null;
@@ -42,15 +47,21 @@ public class ApplyerList extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.applyer_list);
 
-        mList = (ListView)findViewById(R.id.applying_list);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) ID = bundle.getString("ID");
+
+        mList = (ListView)findViewById(R.id.applyers);
         mAdapter = new ApplyerAdapter(this, R.layout.applyer_list_item);
         mList.setAdapter(mAdapter);
 
         mQueue = Volley.newRequestQueue(this);
         requestJSON();
+
+        mList.setOnItemClickListener(this);
     }
+
     protected void requestJSON(){
-        String url = SERVER_APPLYING + ID;
+        final String url = SERVER_APPLYER + ID;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                 url, null, new Response.Listener<JSONObject>(){
@@ -86,6 +97,7 @@ public class ApplyerList extends Activity{
                 String phone = node.getString("phone");
 
                 mArray.add(new Applyer(no, storename, id, gender, local, phone));
+                Log.e("hello:",storename);
             }
         } catch (JSONException | NullPointerException e) {
             Toast.makeText(this,"대타 지원자 목록 받아오기에 실패했습니다.", Toast.LENGTH_SHORT).show();
@@ -102,6 +114,34 @@ public class ApplyerList extends Activity{
         if(mQueue != null)
             mQueue.cancelAll("hello:");
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+        final String recuritment_id = mArray.get(position).get_id();
+        final String URL = SERVER_RECRUITMENT + mArray.get(position).getNo();
+
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(ApplyerList.this);
+        alert_confirm.setMessage(recuritment_id + "님을 채용하시겠습니까?")
+                .setCancelable(false).setPositiveButton("확인",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        recruit(URL);
+                        mArray.remove(position);
+                        mAdapter.notifyDataSetChanged();
+                        Toast.makeText(ApplyerList.this, "대타 채용을 완료하였습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }).setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+        AlertDialog alert = alert_confirm.create();
+        alert.show();
+    }
+
 
     public class Applyer {
         int no;
@@ -134,13 +174,14 @@ public class ApplyerList extends Activity{
         TextView txGender;
         TextView txLocal;
         TextView txPhone;
+        TextView txRecruitment;
     }
 
     public class ApplyerAdapter extends ArrayAdapter<Applyer> {
         LayoutInflater mInflater = null;
 
-        public ApplyerAdapter(Context context, int resource){
-            super(context,resource);
+        public ApplyerAdapter(Context context, int resource) {
+            super(context, resource);
             mInflater = LayoutInflater.from(context);
         }
 
@@ -154,29 +195,49 @@ public class ApplyerList extends Activity{
             ApplyerViewHolder viewHolder;
 
             if (v == null) {
-                v = mInflater.inflate(R.layout.applying_list_item ,parent, false);
+                v = mInflater.inflate(R.layout.applyer_list_item, parent, false);
 
                 viewHolder = new ApplyerViewHolder();
-                viewHolder.txStorename = (TextView)v.findViewById(R.id.applyer_storename);
-                viewHolder.txID = (TextView)v.findViewById(R.id.applyer_id);
-                viewHolder.txGender = (TextView)v.findViewById(R.id.applyer_gender);
-                viewHolder.txLocal = (TextView)v.findViewById(R.id.applyer_local);
-                viewHolder.txPhone = (TextView)v.findViewById(R.id.applyer_phone);
+                viewHolder.txStorename = (TextView) v.findViewById(R.id.applyer_storename);
+                viewHolder.txID = (TextView) v.findViewById(R.id.applyer_id);
+                viewHolder.txGender = (TextView) v.findViewById(R.id.applyer_gender);
+                viewHolder.txLocal = (TextView) v.findViewById(R.id.applyer_local);
+                viewHolder.txPhone = (TextView) v.findViewById(R.id.applyer_phone);
+                viewHolder.txRecruitment = (TextView) v.findViewById(R.id.recruitment);
                 v.setTag(viewHolder);
-            }
-            else {
+            } else {
                 viewHolder = (ApplyerViewHolder) v.getTag();
             }
 
             Applyer info = mArray.get(position);
-            if(info != null){
+            if (info != null) {
                 viewHolder.txStorename.setText(info.getStorename());
                 viewHolder.txID.setText(info.get_id());
-                viewHolder.txGender.setText(info.getGender());
+                viewHolder.txGender.setText("(" + info.getGender() + ")");
                 viewHolder.txLocal.setText(info.getLocal());
                 viewHolder.txPhone.setText(info.get_phone());
             }
             return v;
         }
+    }
+
+    private void recruit(String URL){
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
+                URL, null, new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse (JSONObject response){
+
+            }
+        }
+                ,new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Toast.makeText(ApplyerList.this,
+                        "채용에 실패하셨습니다.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mQueue.add(request);
     }
 }

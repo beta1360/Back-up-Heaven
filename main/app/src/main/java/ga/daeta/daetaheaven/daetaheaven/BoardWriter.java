@@ -4,14 +4,25 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,22 +32,47 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class BoardWriter extends Activity {
     private String ID = null;
+    private final int CAMERA_CODE = 1111;
+    private final int GALLERY_CODE = 1112;
+    private int board_num;
 
     protected RequestQueue mQueue = null;
     protected JSONObject mResult = null;
     protected final String SERVER_LOCAL_FILTER = "http://daeta.ga/locallist?filter=";
     protected final String SERVER_JOB_FILTER = "http://daeta.ga/joblist";
     protected final String SERVER_REGIST_BOARD = "http://daeta.ga/board_regist";
+    protected final String SERVER_IMAGE_UPLOAD = "http://daeta.ga/upload?no=";
+    protected final String CAPTURE_IMAGE = "사진 촬영";
+    protected final String GET_GALLARY = "갤러리에서 가져오기";
     protected String upper_local_text = null;
     protected String upper_local = "대한민국";
     protected String lower_local = null;
@@ -68,9 +104,12 @@ public class BoardWriter extends Activity {
     private Button job = null;
     private EditText favorable_condition = null;
     private EditText detail = null;
+    private Button image_selector = null;
 
     private Button ok_button = null;
     private Button cancel_button = null;
+    private ImageView selected_image = null;
+    private TextView image_path = null;
 
     protected String st_year = null;
     protected String st_month = null;
@@ -115,6 +154,10 @@ public class BoardWriter extends Activity {
     protected String selected_job = null;
 
     private JSONObject request_board_register = null;
+
+    private Uri photoUri;
+    private String currentPhotoPath;//실제 사진 파일 경로
+    String mImageCaptureName;//이미지 이름
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -234,9 +277,10 @@ public class BoardWriter extends Activity {
                         public void onClick(DialogInterface dialog, int which) {
                             try {
                                 sendBoardInfo();
+                                sendImage();
                                 Toast.makeText(BoardWriter.this,"게시물 작성에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                                 Intent go_main = new Intent(BoardWriter.this, MainActivity.class);
-                                go_main.putExtra("id", ID);
+                                go_main.putExtra("ID", ID);
                                 startActivity(go_main);
                             } catch(Exception e) {
                                 Toast.makeText(BoardWriter.this,"게시물 작성에 실패하셨습니다.", Toast.LENGTH_SHORT).show();
@@ -294,12 +338,173 @@ public class BoardWriter extends Activity {
         }
     };
 
+    Button.OnClickListener selectImage = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showImageDialog();
+        }
+    };
+
+    void showImageDialog() {
+        final List<String> ListItems = new ArrayList<>();
+        ListItems.add(CAPTURE_IMAGE);
+        ListItems.add(GET_GALLARY);
+        final CharSequence[] items = ListItems.toArray(new String[ListItems.size()]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("사진 가져오기");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int pos) {
+                String selectedText = items[pos].toString();
+                if(selectedText.equals(CAPTURE_IMAGE)){
+                    getImageByCapture();
+                } else if (selectedText.equals(GET_GALLARY)){
+                    getImageInGallery();
+                } else {
+                    Toast.makeText(BoardWriter.this,"Dialog Error",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void getImageByCapture(){
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+
+                }
+                if (photoFile != null) {
+                    photoUri = FileProvider.getUriForFile(this, getPackageName(), photoFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    startActivityForResult(intent, CAMERA_CODE);
+                }
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        File dir = new File(Environment.getExternalStorageDirectory() + "/path/");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        mImageCaptureName = timeStamp + ".png";
+
+        File storageDir = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/path/"
+                + mImageCaptureName);
+        currentPhotoPath = storageDir.getAbsolutePath();
+
+        return storageDir;
+    }
+
+    private void getPictureForPhoto() {
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(currentPhotoPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int exifOrientation;
+        int exifDegree;
+
+        if (exif != null) {
+            exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            exifDegree = exifOrientationToDegrees(exifOrientation);
+        } else {
+            exifDegree = 0;
+        }
+        selected_image.setImageBitmap(rotate(bitmap, exifDegree));
+        image_path.setText(currentPhotoPath);
+    }
+
+    private int exifOrientationToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+        return 0;
+    }
+
+    private Bitmap rotate(Bitmap src, float degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        return Bitmap.createBitmap(src, 0, 0, src.getWidth(),
+                src.getHeight(), matrix, true);
+    }
+
+    private void getImageInGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, GALLERY_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GALLERY_CODE:
+                    sendPicture(data.getData()); //갤러리에서 가져오기
+                    break;
+                case CAMERA_CODE:
+                    getPictureForPhoto(); //카메라에서 가져오기
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
+    private void sendPicture(Uri imgUri) {
+        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int exifDegree = exifOrientationToDegrees(exifOrientation);
+
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        selected_image.setImageBitmap(rotate(bitmap, exifDegree));
+        image_path.setText(currentPhotoPath);
+    }
+
+    private String getRealPathFromURI(Uri contentUri) {
+        int column_index=0;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        if(cursor.moveToFirst()){
+            column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        }
+
+        return cursor.getString(column_index);
+    }
+
     protected void sendBoardInfo()  {
         sendRegistBoardStream();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
                 SERVER_REGIST_BOARD, request_board_register, new Response.Listener<JSONObject>(){
             @Override
             public void onResponse (JSONObject response){
+                try {
+                    board_num = response.getInt("no");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 return;
             }
         }
@@ -311,6 +516,34 @@ public class BoardWriter extends Activity {
             }
         });
         mQueue.add(request);
+    }
+
+    protected void sendImage(){
+        String url = SERVER_IMAGE_UPLOAD + Integer.toString(board_num);
+        // 파일을 서버로 보내는 부분
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(url);
+
+        File glee = new File(currentPhotoPath);
+        FileBody bin = new FileBody(glee);
+
+        MultipartEntityBuilder meb = MultipartEntityBuilder.create();
+        meb.setCharset(Charset.forName("UTF-8"));
+        meb.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        meb.addPart("database", bin);
+        HttpEntity entity = meb.build();
+
+        post.setEntity(entity);
+
+        try {
+            HttpResponse reponse = client.execute(post);
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } // post 형식의 데이터를 서버로 전달
     }
 
     protected void sendRegistBoardStream() {
@@ -442,7 +675,6 @@ public class BoardWriter extends Activity {
         }
     }
 
-
     protected void getJobFilter()  {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                 SERVER_JOB_FILTER, null, new Response.Listener<JSONObject>(){
@@ -477,7 +709,6 @@ public class BoardWriter extends Activity {
         }
     }
 
-
     protected void getJobDialog(){
         final CharSequence[] items = jobList.toArray(new String[jobList.size()]);
         AlertDialog.Builder builder = new AlertDialog.Builder(BoardWriter.this);
@@ -500,7 +731,7 @@ public class BoardWriter extends Activity {
     }
 
     private void intializeSpinner(){
-        for(int i=1900; i<=2018; i++){
+        for(int i=2018; i<=2030; i++){
             st_yearList.add(Integer.toString(i));
             ed_yearList.add(Integer.toString(i));
         }
@@ -572,6 +803,7 @@ public class BoardWriter extends Activity {
         end_day.setOnItemSelectedListener(selected_end_day);
         end_hour.setOnItemSelectedListener(selected_end_hour);
         end_min.setOnItemSelectedListener(selected_end_min);
+        image_selector.setOnClickListener(selectImage);
 
         ok_button.setOnClickListener(ok_event);
         cancel_button.setOnClickListener(cancel_event);
@@ -603,8 +835,11 @@ public class BoardWriter extends Activity {
         job = (Button)findViewById(R.id.bw_job);
         favorable_condition = (EditText)findViewById(R.id.bw_plus);
         detail = (EditText)findViewById(R.id.bw_addinformation);
+        image_selector = (Button)findViewById(R.id.board_img_select);
 
         ok_button = (Button)findViewById(R.id.bw_okButton);
         cancel_button = (Button)findViewById(R.id.bw_cancelButton);
+        selected_image = (ImageView)findViewById(R.id.selected_image);
+        image_path = (TextView)findViewById(R.id.img_path);
     }
 }

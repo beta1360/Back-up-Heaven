@@ -7,12 +7,13 @@
     android:layout_margin="15dp"
     android:padding="10dp">
 
-    <ImageView
-        android:layout_width="60dp"
+    <com.android.volley.toolbox.NetworkImageView
+        android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_lock_open_black_24dp" />
+        android:id="@+id/networkimage"/>
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 

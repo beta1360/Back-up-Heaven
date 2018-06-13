@@ -13,7 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFBB00"
+            android:background="#FFD700"
             android:orientation="vertical">
 
             <TextView
@@ -51,6 +51,41 @@
                 android:padding="1dp"
                 android:layout_margin="3dp"
                 android:hint="제목을 입력하세요" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이미지 : "
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/board_img_select"
+                    android:text="이미지를 선택하세요."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/img_path"
+                android:textSize = "5dp"/>
+
+            <ImageView
+                android:id="@+id/selected_image"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
         </LinearLayout>
 
         <LinearLayout

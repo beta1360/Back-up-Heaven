@@ -16,7 +16,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -47,6 +49,8 @@ public class DetailBoard extends Activity {
 
     protected Button apply_daeta = null;
     protected JSONObject applyer = null;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,12 +77,14 @@ public class DetailBoard extends Activity {
         add_info = (TextView) findViewById(R.id.detail_addinformation);
         detail_main = (TextView) findViewById(R.id.detail_main);
 
+
         apply_daeta = (Button)findViewById(R.id.apply_daeta);
         apply_daeta.setOnClickListener(apply_listener);
 
         SERVER_BOARD = SERVER_BOARD + Integer.toString(no);
         mQueue = Volley.newRequestQueue(this);
         getDetailBoard();
+
     }
 
     protected void getDetailBoard() {
@@ -144,7 +150,7 @@ public class DetailBoard extends Activity {
                 Toast.makeText(DetailBoard.this,"로그인이 필요한 서비스입니다.",Toast.LENGTH_SHORT).show();
             else {
                 AlertDialog.Builder alert_confirm = new AlertDialog.Builder(DetailBoard.this);
-                alert_confirm.setMessage(storename + "에 대타 지원하시겠습니까?")
+                alert_confirm.setMessage(storename.getText().toString() + "에 대타 지원하시겠습니까?")
                         .setCancelable(false).setPositiveButton("확인",
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -152,7 +158,7 @@ public class DetailBoard extends Activity {
                                 applyDaeta();
                                 Toast.makeText(DetailBoard.this, "대타 지원을 완료하셨습니다.", Toast.LENGTH_SHORT).show();
                                 Intent go_main = new Intent(DetailBoard.this, ApplyingList.class);
-                                go_main.putExtra("id", ID);
+                                go_main.putExtra("ID", ID);
                                 startActivity(go_main);
                             }
                         }).setNegativeButton("취소",

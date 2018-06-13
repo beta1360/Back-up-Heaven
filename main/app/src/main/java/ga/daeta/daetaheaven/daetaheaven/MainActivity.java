@@ -1,13 +1,21 @@
 package ga.daeta.daetaheaven.daetaheaven;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,11 +35,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -42,13 +53,18 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import static android.os.StrictMode.setThreadPolicy;
+
+@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
     private String ID = null;
+    private String state;
 
     protected String upper_local_filter = "대한민국";
     protected String lower_local_filter;
     protected String job_filter = null;
+
     protected RequestQueue mQueue = null;
     protected JSONObject mResult = null;
     protected Button upper_local = null;
@@ -61,15 +77,26 @@ public class MainActivity extends AppCompatActivity
     protected ArrayList<String> lowerLocalList = new ArrayList<String>();
     protected ArrayList<String> jobList = new ArrayList<String>();
     protected SimpleStoreInfoAdapter mAdapter = null;
+    protected ImageLoader mImageLoader = null;
 
     protected final String SERVER_HOME = "http://daeta.ga/home";
     protected final String SERVER_LOCAL_FILTER = "http://daeta.ga/locallist?filter=";
     protected final String SERVER_JOB_FILTER = "http://daeta.ga/joblist";
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        setThreadPolicy(policy);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null)
@@ -97,6 +124,7 @@ public class MainActivity extends AppCompatActivity
         getDaeta = (ImageButton)findViewById(R.id.imagebutton);
 
         mQueue = Volley.newRequestQueue(this);
+        mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(this));
         requestBoardList(null, null);
 
         boards.setOnItemClickListener(this);
@@ -135,6 +163,44 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    boolean checkExternalStorage() {
+        state = Environment.getExternalStorageState();
+        // 외부메모리 상태
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            // 읽기 쓰기 모두 가능
+            Log.d("check", "외부메모리 읽기 쓰기 모두 가능");
+            return true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)){
+            //읽기전용
+            Log.d("check", "외부메모리 읽기만 가능");
+            return false;
+        } else {
+            // 읽기쓰기 모두 안됨
+            Log.d("check", "외부메모리 읽기쓰기 모두 안됨 : "+ state);
+            return false;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        checkExternalStorage();
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        PERMISSIONS_STORAGE,
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+            }
+        }
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -152,21 +218,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -175,34 +226,49 @@ public class MainActivity extends AppCompatActivity
         Intent intent;
         switch(id) {
             case R.id.login:
-                intent = new Intent(MainActivity.this, Login.class);
-                intent.putExtra("id", ID);
-                startActivity(intent);
+                if(ID == null) {
+                    intent = new Intent(MainActivity.this, Login.class);
+                    intent.putExtra("ID", ID);
+                    startActivity(intent);}
+                else
+                    Toast.makeText(MainActivity.this, "이미 로그인 상태입니다.", Toast.LENGTH_SHORT).show();
+
                 break;
+
 
             case R.id.join:
                 if(ID == null) {
                     intent = new Intent(MainActivity.this, Signup.class);
-                    intent.putExtra("id", ID);
+                    intent.putExtra("ID", ID);
                     startActivity(intent);
                 } else
                     Toast.makeText(MainActivity.this, "이미 로그인 상태입니다.", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.applying:
-                intent = new Intent(MainActivity.this, ApplyingList.class);
-                intent.putExtra("id", ID);
-                startActivity(intent);
+                if(ID == null){
+                    Toast.makeText(MainActivity.this, "로그인이 필요한 서비스입니다.", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(MainActivity.this, Login.class);
+                    startActivity(intent);
+
+                } else {
+                    intent = new Intent(MainActivity.this, ApplyingList.class);
+                    intent.putExtra("ID", ID);
+                    startActivity(intent);
+                }
                 break;
 
             case R.id.serve_daeta:
-                intent = new Intent(MainActivity.this, ApplyerList.class);
-                intent.putExtra("id", ID);
-                startActivity(intent);
-                break;
-
-            case R.id.settings:
-
+                if(ID == null){
+                    Toast.makeText(MainActivity.this, "로그인이 필요한 서비스입니다.", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(MainActivity.this, Login.class);
+                    startActivity(intent);
+                }
+                else {
+                    intent = new Intent(MainActivity.this, ApplyerList.class);
+                    intent.putExtra("ID", ID);
+                    startActivity(intent);
+                }
                 break;
 
             default:
@@ -222,6 +288,7 @@ public class MainActivity extends AppCompatActivity
             url = SERVER_LOCAL_FILTER + temp;
         } catch (UnsupportedEncodingException e){
             Toast.makeText(MainActivity.this,e.toString(),Toast.LENGTH_SHORT).show();
+
         }
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                 url, null, new Response.Listener<JSONObject>(){
@@ -314,9 +381,15 @@ public class MainActivity extends AppCompatActivity
                 upper_local.setText(upper_local_filter);
                 upper_local.setTextColor(Color.BLUE);
                 upper_local.setTypeface(Typeface.DEFAULT_BOLD);
-                requestBoardList(upper_local_filter, job_filter);
-                mAdapter.notifyDataSetChanged();
 
+                if(items[pos].toString().equals("전체")) {
+                    upper_local_filter = "대한민국";
+                    requestBoardList(null, job_filter);
+                }
+                else{
+                    requestBoardList(upper_local_filter, job_filter);
+                }
+                mAdapter.notifyDataSetChanged();
                 lower_local.setText("시/군/구");
                 lower_local.setTextColor(Color.BLACK);
                 lower_local.setTypeface(Typeface.DEFAULT);
@@ -333,10 +406,19 @@ public class MainActivity extends AppCompatActivity
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int pos) {
                 lower_local_filter = items[pos].toString();
-                lower_local.setText(lower_local_filter);
-                lower_local.setTextColor(Color.BLUE);
-                lower_local.setTypeface(Typeface.DEFAULT_BOLD);
-                requestBoardList(lower_local_filter, job_filter);
+                if(lower_local_filter.equals("전체")){
+                    lower_local_filter = null;
+                    lower_local.setText("시/군/구");
+                    lower_local.setTextColor(Color.BLACK);
+                    lower_local.setTypeface(Typeface.DEFAULT);
+                    lower_local_filter = null;
+                    requestBoardList(upper_local_filter, job_filter);
+                } else {
+                    lower_local.setText(lower_local_filter);
+                    lower_local.setTextColor(Color.BLUE);
+                    lower_local.setTypeface(Typeface.DEFAULT_BOLD);
+                    requestBoardList(lower_local_filter, job_filter);
+                }
                 mAdapter.notifyDataSetChanged();
             }
         });
@@ -350,10 +432,17 @@ public class MainActivity extends AppCompatActivity
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int pos) {
                 job_filter = items[pos].toString();
-                job.setText(job_filter);
-                job.setTextColor(Color.BLUE);
-                job.setTypeface(Typeface.DEFAULT_BOLD);
-                if(lower_local_filter != null)
+                if(job_filter.equals("전체")){
+                    job_filter = null;
+                    job.setText("직종 선택");
+                    job.setTextColor(Color.BLACK);
+                    job.setTypeface(Typeface.DEFAULT);
+                } else {
+                    job.setText(job_filter);
+                    job.setTextColor(Color.BLUE);
+                    job.setTypeface(Typeface.DEFAULT_BOLD);
+                }
+                if (lower_local_filter != null)
                     requestBoardList(lower_local_filter, job_filter);
                 else
                     requestBoardList(upper_local_filter, job_filter);
@@ -366,23 +455,27 @@ public class MainActivity extends AppCompatActivity
     protected void getUpperLocalList() throws JSONException {
         upperLocalList.clear();
         JSONArray upperLocal = mResult.getJSONArray("local_list");
+        upperLocalList.add("전체");
         for(int i=0; i<upperLocal.length(); i++){
             String node = upperLocal.get(i).toString();
             upperLocalList.add(node);
         }
+
     }
 
     protected void getLowerLocalList() throws JSONException {
         lowerLocalList.clear();
-        JSONArray upperLocal = mResult.getJSONArray("local_list");
-        for(int i=0; i<upperLocal.length(); i++){
-            String node = upperLocal.get(i).toString();
+        JSONArray lowerLocal = mResult.getJSONArray("local_list");
+        lowerLocalList.add("전체");
+        for(int i=0; i<lowerLocal.length(); i++){
+            String node = lowerLocal.get(i).toString();
             lowerLocalList.add(node);
         }
     }
 
     protected void getJobList() throws JSONException {
         jobList.clear();
+        jobList.add("전체");
         JSONArray upperLocal = mResult.getJSONArray("job_list");
         for(int i=0; i<upperLocal.length(); i++){
             String node = upperLocal.get(i).toString();
@@ -450,7 +543,7 @@ public class MainActivity extends AppCompatActivity
                 int no = node.getInt("no");
 
                 mArray.add(new SimpleStoreInfo(storename, address, start_time, end_time, urgency, no));
-                Log.i("list :","storename : "+storename);
+                Log.i("list :","no:"+ Integer.toString(no) +"storename : "+storename);
             }
         } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
@@ -503,6 +596,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     static class SimpleStoreViewHolder {
+        NetworkImageView vImage;
         TextView vhStorename;
         TextView vhAddress;
         TextView vhStartTime;
@@ -531,6 +625,7 @@ public class MainActivity extends AppCompatActivity
                 v = mInflater.inflate(R.layout.simple_board, parent, false);
 
                 viewHolder = new SimpleStoreViewHolder();
+                viewHolder.vImage = (NetworkImageView)v.findViewById(R.id.networkimage);
                 viewHolder.vhStorename = (TextView)v.findViewById(R.id.textView_list_storename);
                 viewHolder.vhAddress = (TextView)v.findViewById(R.id.textView_list_address);
                 viewHolder.vhStartTime = (TextView)v.findViewById(R.id.textView_start_time);
@@ -544,6 +639,8 @@ public class MainActivity extends AppCompatActivity
 
             SimpleStoreInfo info = mArray.get(position);
             if(info != null) {
+                String img = "http://daeta.ga/image/"+info.getNo()+".png";
+                viewHolder.vImage.setImageUrl(img, mImageLoader);
                 viewHolder.vhStorename.setText(info.getStorename());
                 viewHolder.vhAddress.setText(info.getAddress());
                 viewHolder.vhStartTime.setText(info.getStart_time());

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -33,9 +36,10 @@ public class ApplyingList  extends Activity implements AdapterView.OnItemClickLi
     protected String SERVER_APPLYING = "http://daeta.ga/applying?id=";
     protected RequestQueue mQueue = null;
     protected ArrayList<Applying> mArray = new ArrayList<Applying>();
-    protected GameFieldAdapter mAdapter = null;
+    protected ApplyingAdapter mAdapter = null;
     protected ListView mList = null;
     protected JSONObject mResult = null;
+    protected ImageLoader mImageLoader = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,10 +51,11 @@ public class ApplyingList  extends Activity implements AdapterView.OnItemClickLi
             ID = bundle.getString("ID");
 
         mList = (ListView)findViewById(R.id.applying_list);
-        mAdapter = new GameFieldAdapter(this, R.layout.applying_list_item);
+        mAdapter = new ApplyingAdapter(this, R.layout.applying_list_item);
         mList.setAdapter(mAdapter);
 
         mQueue = Volley.newRequestQueue(this);
+        mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(this));
         requestJSON();
 
         mList.setOnItemClickListener(this);
@@ -92,6 +97,7 @@ public class ApplyingList  extends Activity implements AdapterView.OnItemClickLi
                 String local = node.getString("local");
 
                 mArray.add(new Applying(no, storename, start_time, end_time, local));
+                Log.e("hello:", storename);
             }
         } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
@@ -140,16 +146,17 @@ public class ApplyingList  extends Activity implements AdapterView.OnItemClickLi
     }
 
     static class ApplyingViewHolder {
+        NetworkImageView image;
         TextView txStorename;
         TextView txStart;
         TextView txEnd;
         TextView txLocal;
     }
 
-    public class GameFieldAdapter extends ArrayAdapter<Applying> {
+    public class ApplyingAdapter extends ArrayAdapter<Applying> {
         LayoutInflater mInflater = null;
 
-        public GameFieldAdapter(Context context, int resource){
+        public ApplyingAdapter(Context context, int resource){
             super(context,resource);
             mInflater = LayoutInflater.from(context);
         }
@@ -167,6 +174,7 @@ public class ApplyingList  extends Activity implements AdapterView.OnItemClickLi
                 v = mInflater.inflate(R.layout.applying_list_item ,parent, false);
 
                 viewHolder = new ApplyingViewHolder();
+                viewHolder.image = (NetworkImageView)v.findViewById(R.id.applying_image);
                 viewHolder.txStorename = (TextView)v.findViewById(R.id.applying_storename);
                 viewHolder.txStart = (TextView)v.findViewById(R.id.applying_start_time);
                 viewHolder.txEnd = (TextView)v.findViewById(R.id.applying_end_time);
@@ -179,6 +187,8 @@ public class ApplyingList  extends Activity implements AdapterView.OnItemClickLi
 
             Applying info = mArray.get(position);
             if(info != null){
+                String img = "http://daeta.ga/image/"+ Integer.toString(info.getNo()) +".png";
+                viewHolder.image.setImageUrl(img, mImageLoader);
                 viewHolder.txStorename.setText(info.getStorename());
                 viewHolder.txStart.setText(info.getStart_time());
                 viewHolder.txEnd.setText(info.getEnd_time());

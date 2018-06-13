@@ -64,6 +64,7 @@
 
 
     <string-array name="sido">
+        <item>전체</item>
         <item>서울</item>
         <item>경기도</item>
         <item>인천</item>
