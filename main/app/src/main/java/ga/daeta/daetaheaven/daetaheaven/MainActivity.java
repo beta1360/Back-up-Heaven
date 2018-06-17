@@ -533,7 +533,7 @@ public class MainActivity extends AppCompatActivity
         mArray.clear();
         try{
             JSONArray list = mResult.getJSONArray("boards");
-            for(int i=0; i<list.length(); i++){
+            for(int i=list.length()-1; i>=0; i--){
                 JSONObject node = list.getJSONObject(i);
                 String storename = node.getString("storename");
                 String address = node.getString("address");
